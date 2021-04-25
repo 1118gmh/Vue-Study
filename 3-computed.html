@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>computed计算属性--全选不全选按钮</title>
+</head>
+
+<body>
+    <div id="app">
+        <input type="checkbox" v-model="checkAll">
+        <input type="checkbox" v-for="check in checks" v-model="check.value">
+    </div>
+    <script src="./node_modules/vue/dist/vue.js"></script>
+    <script>
+        let vm = new Vue({
+            el: "#app",
+            data() {
+                return {
+                    checks: [{
+                        value: true
+                    }, {
+                        value: true
+                    }, {
+                        value: false
+                    }]
+                }
+            },
+            computed: {
+                checkAll: {
+                    get() {
+                        return this.checks.every(check => check.value);
+                    },
+                    set(newValue) {
+                        this.checks.forEach(item => {
+                            item.value = newValue;
+                        });
+                    }
+                }
+            }
+
+        });
+    </script>
+</body>
+
+</html>

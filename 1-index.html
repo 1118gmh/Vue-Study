@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <!-- <div id="container">
+        {{name[0].n}}
+    </div> -->
+    <div id="container">
+        <template v-for="item in testAry"> 
+            <li :key="item.id">{{item.name}}</li>
+            <li :key="item.id">{{item.color}}</li>
+        </template>
+        <template v-if="isShow">
+            <span >你好</span>
+            <!-- 标识key避免代码的复用 -->
+            <input type="text" key="1">
+        </template>
+        <template v-else>
+            <span >{{text}}</span>
+            <input type="text" key="2" v-model="text">
+        </template>
+    </div>
+
+
+
+    <script src="./node_modules/vue/dist/vue.js"></script>
+    <script>
+        let vm = new Vue({
+            el: '#container', //querySelector
+            data() {
+                //这里是model层
+                return {
+                    name: [{
+                        n: 100
+                    }, 2],
+                    testAry: [{
+                        name: "橘子",
+                        color: "橙色"
+                    }, {
+                        name: "香蕉",
+                        color: "黄色"
+                    }],
+                    isShow: true,
+                    text: "哈哈"
+                };
+            }
+        });
+        //Vue是响应式变化，如果数据更新了，默认会刷新视图
+        vm.name[0].n = 200;
+
+        //
+    </script>
+</body>
+
+</html>

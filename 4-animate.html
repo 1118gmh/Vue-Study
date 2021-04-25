@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>animation--点击实现动画</title>
+    <style>
+        .box {
+            width: 100px;
+            height: 100px;
+            background: red;
+            transform: translate(0, 0);
+        }
+        /* 进入过渡开始的状态 */
+        
+        .fade-enter {
+            background: blue;
+            transform: translate(100px, 100px);
+        }
+        /* 进入过渡生效到的状态 */
+        
+        .fade-enter-active {
+            background: purple;
+            transition: 1s;
+        }
+        /* 进入过渡结束的状态 */
+        
+        .fade-enter-to {
+            background: yellow;
+        }
+        /* 离开过渡开始的位置 */
+        
+        .fade-leave {
+            background: green;
+        }
+        /* 离开过渡生效的状态 */
+        
+        .fade-leave-active {
+            transition: 1s;
+            background: hotpink;
+        }
+        /* 离开过渡结束的状态 */
+        
+        .fade-leave-to {
+            transform: translate(100px, 100px);
+            background: lightseagreen;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <button @click="change">点我</button>
+        <!-- 实现动画规范：必须先套一个transition模板 -->
+        <transition name="fade" mode="">
+            <div class="box" v-if="isShow" ref="list"></div>
+        </transition>
+    </div>
+    <script src="./node_modules/vue/dist/vue.js"></script>
+    <script>
+        let vm = new Vue({
+            el: "#app",
+            data() {
+                return {
+                    isShow: false
+                }
+            },
+            methods: {
+                change() {
+                    this.isShow = !this.isShow;
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

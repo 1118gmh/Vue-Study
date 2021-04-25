@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>自定义指令--点击表单显示日历案例</title>
+</head>
+
+<body>
+    <div id="app">
+        <div v-click-outside>
+            <input type="text">
+            <div class="content" v-if="isShow" style="width: 200px;height: 200px;background: red;">
+                <button>点我</button>
+            </div>
+        </div>
+    </div>
+    <script src="./node_modules/vue/dist/vue.js"></script>
+    <script>
+        let vm = new Vue({
+            el: "#app",
+            directives: {
+                clickOutside: { //自定义一个v-click-outside指令
+                    bind(el, bindings, vnode) {
+                        el.fn = e => {
+                            if (el.contains(e.target)) {
+                                console.log(vnode.context);
+                                vnode.context["focus"](); //vnode.context => vue实例 vm
+                            } else {
+                                vnode.context["blur"]();
+                            }
+                        };
+                        document.addEventListener('click', el.fn);
+                    },
+                    unbind(el, bindings, vnode) {
+                        document.removeEventListener('click', el.fn);
+                    }
+                }
+            },
+            data() {
+                return {
+                    isShow: false
+                }
+            },
+            methods: {
+                blur() {
+                    this.isShow = false;
+                },
+                focus() {
+                    this.isShow = true;
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

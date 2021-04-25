@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">
+        <my-component></my-component>
+    </div>
+    <script src="./node_modules/vue/dist/vue.js"></script>
+    <script>
+        /**
+         * 为什么要用组件：
+         *  复用、方便维护、减少渲染
+         * 
+         * 组件创建使用的注意点：
+         * 1. 标签名不要和原生的一样
+         * 2. html不支持自定义闭合标签
+         * 3. html标签没有大写，如果组件名中有大写，则在html标签中用下划线隔开
+         * 
+         * 组件的特点：
+         * 1. 独立，每个疯件应该是不相关的，单向数据流
+         * 
+         * 如果将my-component挂载到根实例上，
+         * 则执行顺序：
+         * 挂载前 -> 挂载前1 -> 挂载后1 -> 挂载后
+         * 
+         *  
+         * */
+        Vue.component('myComponent', {
+            template: `<div>my组件</div>`,
+            beforeMount() {
+                console("挂载前1");
+            },
+            mounted() {
+                console.log("挂载后1");
+            }
+
+        });
+
+        let vm = new Vue({
+            el: '#app',
+            beforeMount() {
+                console.log("挂载前");
+            },
+            mounted() {
+                console.log("挂载后");
+            }
+
+        });
+    </script>
+</body>
+
+</html>

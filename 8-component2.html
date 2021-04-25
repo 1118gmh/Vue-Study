@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">
+        <my-component :mny="a"></my-component>
+    </div>
+    <script src="./node_modules/vue/dist/vue.js"></script>
+    <script>
+        /**
+         * 导入一个组件 -> 注册 -> 使用（在当前定义的模板中使用）
+         * 
+         * 组件的注册
+         *  1. 全局注册
+         *      Vue.component('myComponent',component);
+         *  2. 局部注册
+         *      在父组件中注册，则只能在父组件定义的模板中使用
+         *      components: {myComponent: component}
+         * */
+
+        /**
+         * 组件的传递 父组件
+         * 每个组件都应该有三部分
+         * 1. html
+         * 2. js
+         * 3. 样式
+         * 
+         * */
+        let component = {
+            //相当于this.mny=100；但是这是父亲的属性，最好不要直接对其进行更改
+            // props: ['mny'],
+            props: { //表示我要对
+                mny: {
+                    type: Object, //类型校验
+                    default: () => ({
+                        a: 1
+                    }), //默认值
+                    // required:true //必填校验
+                }
+            },
+            template: `<div>儿子{{mny}}</div>`,
+            data() {
+                return {
+                    m: 1
+                }
+            },
+            beforeCreate() { //这里可以描述父子关系
+                console.log(this.$parent.$children[0] === this);
+            },
+            methods: {
+                // change() {
+                //     this.mny = 200;
+                // }
+            }
+        };
+        //全局注册
+        // Vue.component('myComponent', component);
+
+        //局部注册
+        let vm = new Vue({
+            el: '#app',
+            data() {
+                return {
+                    mny: 100,
+                    a: {
+                        m: 1
+                    }
+
+                }
+            },
+            components: {
+                myComponent: component
+            }
+        });
+    </script>
+</body>
+
+</html>

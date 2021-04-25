@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>组件基础</title>
+</head>
+
+<body>
+    <div id="app">{{n}}</div>
+    <script src="./node_modules/vue/dist/vue.js"></script>
+    <script>
+        let vm = new Vue({
+            el: "#app",
+            //当前这个实例它的父亲是谁，儿子是谁，有一套发布订阅 $on $emit
+            beforeCreate() {
+                //创建之前
+                //我希望在每个组件中增加一些特定的属性，可以采用这个钩子，基本上业务逻辑是不需要它的
+                console.log(this);
+                console.log('before create');
+            },
+            created() {
+                //当前这个组件实例已经实现了，数据劫持，把方法、计算属性也都挂载到了实例，
+                //但是不能获取真实的DOM元素
+                console.log(this);
+                console.log('created'); //创建完成 可以发送ajax，不能操作dom
+            },
+            // render() { //如果有了render，就不会使用template
+            //     console.log(this);
+            //     console.log('render');
+            // },
+            // template: `<div>hello</div>`,
+            data() {
+                return {
+                    n: 1
+                }
+            },
+            beforeMount() { //在挂载之前会调用render方法
+                //挂载之前
+                console.log('挂载之前'); //调用render，但是一般不会增加业务逻辑
+
+
+            },
+            mounted() { // 直接把ajax的操作放到mounted中
+                console.log('当前组件挂载完毕');
+                console.log(this.$el);
+            },
+            beforeUpdate() { //数据是应用到视图上，并且数据要更新了，则执行该方法
+                console.log('更新之前'); //可以在这里，增加一些数据，不会导致视图多次更新
+            },
+            updated() { // 不要再去更新数据，可能会发生死循环
+                // this.n = Math.random(); //不要在这里该数据，会死循环
+                console.log('更新完成');
+            },
+            beforeDestroy() {
+                //事件的移除 清空定时器
+                console.log('销毁前');
+            },
+            destroyed() {
+                console.log('销毁后');
+            }
+
+            //组件化的好处：方便复用，比较好维护
+            //vue的更新方式是组件界别的s
+
+        });
+
+        //$mount 可以指定一个元素，不指定元素的话，内部会默认渲染一个内存中的节点
+        // vm.$mount('#app');
+        // console.log(vm.$el);
+        //我可以自己将渲染号的元素插入到自己想放的节点中
+        // document.body.appendChild(vm.$el);
+
+        //手动移除组件 路由切换
+        // vm.$destroy(); //移除所有的观察者，移除监听事件
+        console.log(vm);
+        /**
+         * 渲染元素总结：
+         *  - 一般情况下渲染我们使用模板来创建的html，直接在页面中引入我们创建的模板，则直接渲染
+         *  - 通过template创建的模板，需要通过vm.$mount()渲染，并且将渲染的元素append到指定节点中
+         *  - 如果不指定元素，则默认渲染一个内存中的节点，也就不会再渲染我们创建的模板了
+         *  - 如果有render函数，则不会使用模板了，则用render通过js代码渲染
+         * 
+         * */
+        /**
+         * mounted / beforeDestroy这两个生命周期函数用的多
+         *  mounted:多用于ajax请求
+         * beforeDestroy:定时器、事件的清除
+         * 
+         * 
+         * */
+    </script>
+</body>
+
+</html>
