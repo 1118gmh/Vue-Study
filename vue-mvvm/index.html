@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>test</title>
+</head>
+<body>
+  <div id="app">
+    <input type="text" v-model='school.name'>
+    <div>{{school.name}}</div>
+    <div> {{school.age}} </div>
+    {{getName}}
+    <button v-on:click="change">更新</button>
+    <div v-html="message"></div>
+  </div>
+  <!-- <script src="./node_modules/vue/dist/vue.js"></script> -->
+  <script src="./MVVM.js"></script>
+  <script>
+    let vm = new Vue({
+      el:'#app',
+      data () {
+        return {
+          school:{
+            name:'gmh',
+            age:21,
+            value:[1,2,3],
+          },
+          message:'<h1>Im Coming</h1>'
+
+        }
+      },
+      computed: {
+        getName(){
+          return `名字：${this.school.name}`;
+        }
+      },
+      methods: {
+        change(){
+          this.school.name = 'heihei';
+        }
+      }
+
+    });
+  </script>
+</body>
+</html>

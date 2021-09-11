@@ -29,7 +29,7 @@ export default {
     profileAuth:function (to,from,next){
         if(to.name === 'profile'){
             if(store.state.isLogin && store.state.user.menuList){
-                //我们不能每次跳转到个人file页面就拉取一次，因此需要在拉取一次过后，设置菜单权限
+                //我们不能每次跳转到个人profile页面就拉取一次，因此需要在拉取一次过后，设置菜单权限
                 if(!store.state.menuPermission){
                     let list = store.state.user.menuList.map(item => item.name);
                     let newRoutes = auth.filter(item=> list.includes(item.name));

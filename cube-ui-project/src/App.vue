@@ -53,7 +53,7 @@ export default {
 
   watch: {
     $route: {
-      //监控路由属性的变化，让$route随路由的变化而改变（也就是地址栏变，对应tab标签亮）
+      //监控路由属性的变化，让$route随路由的变化而改变（设置切换动画，并且路由改变，路由对应的tab标签亮）
       handler(to, from) {
         if(to&&from){
           if(to.meta.idx > from.meta.idx){
@@ -64,7 +64,7 @@ export default {
         }
         this.selectedLabelDefault = to.path;
       },
-      immediate: true
+      immediate: true //如果数据中声明了$route属性，则立刻执行一次handler方法
     }
   }
 };
