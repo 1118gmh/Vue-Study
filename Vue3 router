@@ -1,0 +1,181 @@
+### 路由API
+```
+import { useRouter, useRoute } from 'vue-router';
+const router = useRouter();
+const route = useRoute();
+
+
+router.go(1)                前进 1
+router.back()              后退 1
+router.push()              路由跳转
+
+router.addRoute()           添加路由（name冲突时会替换，返回一个方法，执行则删除这个路由）
+router.removeRoute()        删除路由
+router.hasRoute()           查看是否存在某个路由
+router.getRoutes()          获取所有的路由
+
+```
+
+### 路由基础
+```
+npm install vue-router@4
+
+【/router index.ts】
+//引入路由对象
+import { createRouter, createWebHistory, createWebHashHistory, createMemoryHistory, RouteRecordRaw } from 'vue-router'
+ 
+//vue2 mode history vue3 createWebHistory
+//vue2 mode  hash  vue3  createWebHashHistory
+//vue2 mode abstact vue3  createMemoryHistory
+ 
+//路由数组的类型 RouteRecordRaw
+// 定义一些路由
+// 每个路由都需要映射到一个组件。
+const routes: Array<RouteRecordRaw> = [{
+    path: '/',
+    name: 'index',
+    meta:{
+        title: "登录"
+      },
+    alias:["/root","/root2","/root3"],   //别名
+    redirect:'/children1',  //或者{ path: '/user1' }或者
+                                         // redirect: (to) => {
+                                         //       return {
+                                         //           path: '/user1',
+                                         //           query: to.query
+                                         //       }
+                                         //   },
+    component: () => import('../components/a.vue'),
+    children: [
+      {
+        path: "children1",
+        name: "children1",
+        component: () => import("@/views/children1/children1.vue"),
+      },
+    ]
+},{
+    path: '/register',
+    component: () => import('../components/b.vue')
+}]
+ 
+ 
+ 
+const router = createRouter({
+    history: createWebHistory(),
+    routes
+})
+ 
+//导出router
+export default router
+
+【main.ts】挂载
+import { createApp } from 'vue'
+import App from './App.vue'
+import router from './router'
+createApp(App).use(router).mount('#app')
+
+【提供2个组件供全局使用】
+    <router-link tag="div" style="margin-left:200px" to="/register">跳转b</router-link>
+    <router-view></router-view>
+```
+
+### 路由传参
+```
+query,params
+     query要配置path
+    router.push({
+        path: '/reg',
+        query: item
+    })
+
+    params要配置name
+    router.push({
+        name: 'Reg',
+        params: {
+            id: item.id
+        }
+    })
+
+动态路由   :参数    然后通过params传递
+const routes:Array<RouteRecordRaw> = [
+    {
+        path:"/",
+        name:"Login",
+        component:()=> import('../components/login.vue')
+    },
+    {
+        //动态路由参数
+        path:"/reg/:id",
+        name:"Reg",
+        component:()=> import('../components/reg.vue')
+    }
+]
+
+```
+### 路由守卫
+```
+router.beforeEach((to, from, next) => {
+    let token = localStorage.getItem('token')
+    //白名单 有值 或者登陆过存储了token信息可以跳转 否则就去登录页面
+    if (whileList.includes(to.path) || token) {
+        next()
+    } else {
+        next({
+            path:'/'
+        })
+    }
+})
+————————————————
+版权声明：本文为CSDN博主「小满zs」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。
+原文链接：https://blog.csdn.net/qq1195566313/article/details/123699583
+```
+
+
+
+### 滚动行为
+
+> scrollBehavior方法
+> 参数：to，form，savePosition=>{left:number,top:number}
+> 这个方法返回一个位置信息，表示跳转后的位置
+```
+const router = createRouter({
+  history: createWebHistory(),
+  scrollBehavior: (to, from, savePosition) => {
+    console.log(to, '==============>', savePosition);
+    return new Promise((r) => {
+      setTimeout(() => {
+        r({
+          top: 10000
+        })
+      }, 2000);
+    })
+  },
+  
+  const router = createRouter({
+  history: createWebHistory(),
+  scrollBehavior: (to, from, savePosition) => {
+    return {
+       top:200
+    }
+  },
+```
+
+### 动态路由
+
+> 
+```
+const initRouter = async () => {
+    const result = await axios.get('http://localhost:9999/login', { params: formInline });
+    result.data.route.forEach((v: any) => {
+        router.addRoute({
+            path: v.path,
+            name: v.name,
+                                    //这儿不能使用@
+            component: () => import(`../views/${v.component}`)
+        })
+        router.push('/index')
+    })
+    console.log(router.getRoutes());
+ 
+}
+```
